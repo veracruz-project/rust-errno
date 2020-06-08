@@ -6,6 +6,7 @@
 #[cfg(windows)] extern crate winapi;
 #[cfg(target_os = "dragonfly")] extern crate errno_dragonfly;
 #[cfg(target_os = "wasi")] extern crate libc;
+#[cfg(target_os = "optee")] #[macro_use] extern crate lazy_static;
 
 // FIXME(#10): Rust < 1.11 doesn't support cfg_attr on path
 /*
@@ -20,6 +21,8 @@ mod sys;
 #[cfg(windows)] mod sys { pub use windows::*; }
 #[cfg(target_os = "wasi")] mod wasi;
 #[cfg(target_os = "wasi")] mod sys { pub use wasi::*; }
+#[cfg(target_os = "optee")] mod optee;
+#[cfg(target_os = "optee")] mod sys { pub use optee::*; }
 
 use std::fmt;
 use std::io;
