@@ -12,13 +12,17 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+#[cfg(feature = "std")]
 use std::ffi::CStr;
-use libc::{self, c_char, c_int};
+use libc::c_int;
+#[cfg(feature = "std")]
+use libc::{self, c_char};
 #[cfg(target_os = "dragonfly")]
 use errno_dragonfly::errno_location;
 
 use Errno;
 
+#[cfg(feature = "std")]
 pub fn with_description<F, T>(err: Errno, callback: F) -> T where
     F: FnOnce(Result<&str, Errno>) -> T
 {
@@ -35,6 +39,7 @@ pub fn with_description<F, T>(err: Errno, callback: F) -> T where
     callback(Ok(&String::from_utf8_lossy(c_str.to_bytes())))
 }
 
+#[cfg(feature = "std")]
 pub const STRERROR_NAME: &'static str = "strerror_r";
 
 pub fn errno() -> Errno {
@@ -60,12 +65,16 @@ extern {
                    target_os = "bitrig",
                    target_os = "android"),
                link_name = "__errno")]
-    #[cfg_attr(target_os = "solaris",
+    #[cfg_attr(any(target_os = "solaris",
+                   target_os = "illumos"),
                link_name = "___errno")]
+    #[cfg_attr(target_os = "haiku",
+               link_name = "_errnop")]
     #[cfg_attr(target_os = "linux",
                link_name = "__errno_location")]
     fn errno_location() -> *mut c_int;
 
+    #[cfg(feature = "std")]
     #[cfg_attr(target_os = "linux", link_name = "__xpg_strerror_r")]
     fn strerror_r(errnum: c_int, buf: *mut c_char,
                   buflen: libc::size_t) -> c_int;

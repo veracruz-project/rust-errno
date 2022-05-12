@@ -1,4 +1,4 @@
-# errno [![Build status](https://img.shields.io/travis/lfairy/rust-errno.svg)](http://travis-ci.org/lfairy/rust-errno) [![Build status](https://ci.appveyor.com/api/projects/status/0fgngg808u7xwto8?svg=true)](https://ci.appveyor.com/project/lfairy/rust-errno) [![Cargo](https://img.shields.io/crates/v/errno.svg)](https://crates.io/crates/errno)
+# errno [![CI](https://github.com/lambda-fairy/rust-errno/actions/workflows/main.yml/badge.svg)](https://github.com/lambda-fairy/rust-errno/actions/workflows/main.yml) [![Cargo](https://img.shields.io/crates/v/errno.svg)](https://crates.io/crates/errno)
 
 Cross-platform interface to the [`errno`][errno] variable. Works on Rust 1.13 or newer.
 
@@ -14,7 +14,6 @@ Add to your `Cargo.toml`:
 ```toml
 [dependencies]
 errno = "*"
-libc = "*"
 ```
 
 
@@ -36,3 +35,15 @@ let code = e.0;
 // Display a human-friendly error message
 println!("Error {}: {}", code, e);
 ```
+
+
+## `#![no_std]`
+
+Enable `#![no_std]` support by disabling the default `std` feature:
+
+```toml
+[dependencies]
+errno = { version = "*", default-features = false }
+```
+
+The `Debug` and `Display` impls will be unavailable.
