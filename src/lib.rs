@@ -31,6 +31,7 @@
 #[cfg_attr(windows, path = "windows.rs")]
 #[cfg_attr(target_os = "wasi", path = "wasi.rs")]
 #[cfg_attr(target_os = "hermit", path = "hermit.rs")]
+#[cfg_attr(target_os = "icecap", path = "icecap.rs")]
 mod sys;
 
 #[cfg(target_os = "optee")] mod optee;
